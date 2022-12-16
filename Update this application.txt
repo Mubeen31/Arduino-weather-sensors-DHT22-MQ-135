@@ -1,0 +1,4 @@
+Update for this dashboard later
+1. Add analysis link
+2. On the navbar, in the middle, display name of city  and current date with current
+time using the global technique in python.
