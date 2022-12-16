@@ -169,9 +169,9 @@ def line_chart_values(n_intervals):
             x = today_hourly_values['Hour'],
             y = today_hourly_values['InsideTemperature'],
             mode = 'markers+lines',
-            line = dict(width = 3, color = '#D35400'),
-            marker = dict(size = 7, symbol = 'circle', color = '#D35400',
-                          line = dict(color = '#D35400', width = 2)
+            line = dict(width = 3, color = '#CA23D5'),
+            marker = dict(size = 7, symbol = 'circle', color = '#CA23D5',
+                          line = dict(color = '#CA23D5', width = 2)
                           ),
             hoverinfo = 'text',
             hovertext =
