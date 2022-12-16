@@ -20,7 +20,7 @@ layout = html.Div([
             html.Div([
                 html.Div(
                     'Arduino DHT22 and MQ-135 sensors measure the temperature, humidity and level of '
-                    'CO2 in the air of ',
+                    'CO2 in the air ',
                     className = 'description'),
                 html.Div('inside room. ', className = 'location_name')
             ], className = 'text_row')
@@ -29,22 +29,22 @@ layout = html.Div([
 
     html.Div([
         html.Div([
-            html.Div(id = 'value1',
+            html.Div(id = 'value4',
                      className = 'card_size1'),
-            html.Div(id = 'value2',
+            html.Div(id = 'value5',
                      className = 'card_size2'),
-            html.Div(id = 'value3',
+            html.Div(id = 'value6',
                      className = 'card_size3')
         ], className = 'value_cards_column'),
         html.Div([
-            dcc.Graph(id = 'line_chart',
+            dcc.Graph(id = 'line_chart1',
                       config = {'displayModeBar': False}),
         ], className = 'chart')
     ], className = 'numeric_values_container')
 ])
 
 
-@app.callback(Output('value1', 'children'),
+@app.callback(Output('value4', 'children'),
               [Input('update_value', 'n_intervals')])
 def update_value(n_intervals):
     credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
@@ -77,7 +77,7 @@ def update_value(n_intervals):
     ]
 
 
-@app.callback(Output('value2', 'children'),
+@app.callback(Output('value5', 'children'),
               [Input('update_value', 'n_intervals')])
 def update_value(n_intervals):
     credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
@@ -110,7 +110,7 @@ def update_value(n_intervals):
     ]
 
 
-@app.callback(Output('value3', 'children'),
+@app.callback(Output('value6', 'children'),
               [Input('update_value', 'n_intervals')])
 def update_value(n_intervals):
     credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
@@ -143,7 +143,7 @@ def update_value(n_intervals):
     ]
 
 
-@app.callback(Output('line_chart', 'figure'),
+@app.callback(Output('line_chart1', 'figure'),
               [Input('update_value', 'n_intervals')])
 def line_chart_values(n_intervals):
     credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
