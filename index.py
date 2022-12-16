@@ -1,6 +1,6 @@
 from dash import html
 from dash import dcc
-from dash.dependencies import Input, Output, State
+from dash.dependencies import Input, Output
 import dash_bootstrap_components as dbc
 
 # Connect to main app.py file
@@ -8,7 +8,7 @@ from app import app
 from app import server
 
 # Connect to your pages
-from apps import outside, inside, analysis, data
+from apps import outside, inside, data
 
 app.layout = html.Div([
     dcc.Location(id = 'url', refresh = True),
