@@ -30,7 +30,7 @@ while True:
     ]
     insert_row = client.insert_rows_json(table_id, rows_to_insert)
     if insert_row == []:
-        print('New row have been added.')
+        print('New row have been added:' + dt_string, inside_humidity, inside_temperature, inside_co2)
     else:
         print(f'Encountered errors while inserting rows: {insert_row}')
 

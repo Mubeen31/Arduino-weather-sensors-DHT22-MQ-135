@@ -1,6 +1,7 @@
 from dash import html
 from dash import dcc
 from dash.dependencies import Input, Output
+from dash.exceptions import PreventUpdate
 import plotly.graph_objs as go
 from app import app
 from google.oauth2 import service_account
@@ -11,7 +12,7 @@ layout = html.Div([
 
     html.Div([
         dcc.Interval(id = 'update_value2',
-                     interval = 1*3000,
+                     interval = 1*5000,
                      n_intervals = 0),
     ]),
 
@@ -47,17 +48,20 @@ layout = html.Div([
 @app.callback(Output('value4', 'children'),
               [Input('update_value2', 'n_intervals')])
 def update_value(n_intervals):
-    credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
-    project_id = 'weatherdata1'
-    df_sql = f"""SELECT
+    if n_intervals == 0:
+        raise PreventUpdate
+    else:
+        credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
+        project_id = 'weatherdata1'
+        df_sql = f"""SELECT
                  *
                  FROM
                  `weatherdata1.WeatherSensorsData1.SensorsData1`
                  ORDER BY
                  DateTime DESC LIMIT 1
                  """
-    df = pd1.read_gbq(df_sql, project_id = project_id, dialect = 'standard', credentials = credentials)
-    get_temp = df['InsideTemperature'].head(1).iloc[0]
+        df = pd1.read_gbq(df_sql, project_id = project_id, dialect = 'standard', credentials = credentials)
+        get_temp = df['InsideTemperature'].head(1).iloc[0]
 
     return [
         html.Div([
@@ -80,17 +84,20 @@ def update_value(n_intervals):
 @app.callback(Output('value5', 'children'),
               [Input('update_value2', 'n_intervals')])
 def update_value(n_intervals):
-    credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
-    project_id = 'weatherdata1'
-    df_sql = f"""SELECT
+    if n_intervals == 0:
+        raise PreventUpdate
+    else:
+        credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
+        project_id = 'weatherdata1'
+        df_sql = f"""SELECT
                  *
                  FROM
                  `weatherdata1.WeatherSensorsData1.SensorsData1`
                  ORDER BY
                  DateTime DESC LIMIT 1
                  """
-    df = pd1.read_gbq(df_sql, project_id = project_id, dialect = 'standard', credentials = credentials)
-    get_humidity = df['InsideHumidity'].head(1).iloc[0]
+        df = pd1.read_gbq(df_sql, project_id = project_id, dialect = 'standard', credentials = credentials)
+        get_humidity = df['InsideHumidity'].head(1).iloc[0]
 
     return [
         html.Div([
@@ -113,17 +120,20 @@ def update_value(n_intervals):
 @app.callback(Output('value6', 'children'),
               [Input('update_value2', 'n_intervals')])
 def update_value(n_intervals):
-    credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
-    project_id = 'weatherdata1'
-    df_sql = f"""SELECT
+    if n_intervals == 0:
+        raise PreventUpdate
+    else:
+        credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
+        project_id = 'weatherdata1'
+        df_sql = f"""SELECT
                  *
                  FROM
                  `weatherdata1.WeatherSensorsData1.SensorsData1`
                  ORDER BY
                  DateTime DESC LIMIT 1
                  """
-    df = pd1.read_gbq(df_sql, project_id = project_id, dialect = 'standard', credentials = credentials)
-    get_co2 = df['InsideCO2'].head(1).iloc[0]
+        df = pd1.read_gbq(df_sql, project_id = project_id, dialect = 'standard', credentials = credentials)
+        get_co2 = df['InsideCO2'].head(1).iloc[0]
 
     return [
         html.Div([
@@ -146,23 +156,26 @@ def update_value(n_intervals):
 @app.callback(Output('line_chart1', 'figure'),
               [Input('update_value2', 'n_intervals')])
 def line_chart_values(n_intervals):
-    credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
-    project_id = 'weatherdata1'
-    df_sql = f"""SELECT
-                 *
-                 FROM
-                 `weatherdata1.WeatherSensorsData1.SensorsData1`
-                 ORDER BY
-                 DateTime ASC
-                 """
-    df = pd1.read_gbq(df_sql, project_id = project_id, dialect = 'standard', credentials = credentials)
-    df['DateTime'] = pd.to_datetime(df['DateTime'])
-    df['Date'] = df['DateTime'].dt.date
-    df['Date'] = pd.to_datetime(df['Date'])
-    df['Hour'] = pd.to_datetime(df['DateTime']).dt.hour
-    unique_date = df['Date'].unique()
-    filter_today_date = df[df['Date'] == unique_date[-1]][['Date', 'Hour', 'InsideTemperature']]
-    today_hourly_values = filter_today_date.groupby(['Date', 'Hour'])['InsideTemperature'].mean().reset_index()
+    if n_intervals == 0:
+        raise PreventUpdate
+    else:
+        credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
+        project_id = 'weatherdata1'
+        df_sql = f"""SELECT
+                     *
+                     FROM
+                     `weatherdata1.WeatherSensorsData1.SensorsData1`
+                     ORDER BY
+                     DateTime ASC
+                     """
+        df = pd1.read_gbq(df_sql, project_id = project_id, dialect = 'standard', credentials = credentials)
+        df['DateTime'] = pd.to_datetime(df['DateTime'])
+        df['Date'] = df['DateTime'].dt.date
+        df['Date'] = pd.to_datetime(df['Date'])
+        df['Hour'] = pd.to_datetime(df['DateTime']).dt.hour
+        unique_date = df['Date'].unique()
+        filter_today_date = df[df['Date'] == unique_date[-1]][['Date', 'Hour', 'InsideTemperature']]
+        today_hourly_values = filter_today_date.groupby(['Date', 'Hour'])['InsideTemperature'].mean().reset_index()
 
     return {
         'data': [go.Scatter(

@@ -1,6 +1,7 @@
 from dash import html
 from dash import dcc
 from dash.dependencies import Input, Output
+from dash.exceptions import PreventUpdate
 from app import app
 from google.oauth2 import service_account
 import pandas_gbq as pd1
@@ -26,7 +27,7 @@ layout = html.Div([
 
     html.Div([
         dcc.Interval(id = 'update_value3',
-                     interval = 1*3000,
+                     interval = 1*5000,
                      n_intervals = 0),
     ]),
 
@@ -69,21 +70,26 @@ layout = html.Div([
 @app.callback(Output('total_rows', 'children'),
               [Input('update_value3', 'n_intervals')])
 def update_value(n_intervals):
-    credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
-    project_id = 'weatherdata1'
-    df_sql = f"""SELECT
+    if n_intervals == 0:
+        raise PreventUpdate
+    else:
+        credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
+        project_id = 'weatherdata1'
+        df_sql = f"""SELECT
                  *
                  FROM
                  `weatherdata1.WeatherSensorsData1.SensorsData1`
+                 ORDER BY
+                 DateTime ASC
                  """
-    df = pd1.read_gbq(df_sql, project_id = project_id, dialect = 'standard', credentials = credentials)
-    df['DateTime'] = pd.to_datetime(df['DateTime'])
-    df['Date'] = df['DateTime'].dt.date
-    df['Date'] = pd.to_datetime(df['Date'])
-    df['Hour'] = pd.to_datetime(df['DateTime']).dt.hour
-    unique_date = df['Date'].unique()
-    filter_today_date = len(df[df['Date'] == unique_date[-1]])
-    filter_total_rows = len(df[df['Date']])
+        df = pd1.read_gbq(df_sql, project_id = project_id, dialect = 'standard', credentials = credentials)
+        df['DateTime'] = pd.to_datetime(df['DateTime'])
+        df['DateTime'] = pd.to_datetime(df['DateTime'], format = '%Y-%m-%d %H:%M:%S')
+        df['Date'] = df['DateTime'].dt.date
+        df['Hour'] = pd.to_datetime(df['DateTime']).dt.hour
+        unique_date = df['Date'].unique()
+        filter_today_date = len(df[df['Date'] == unique_date[-1]])
+        filter_total_rows = len(df['Date'])
 
     return [
         html.Div([
@@ -109,15 +115,21 @@ def update_value(n_intervals):
 @app.callback(Output('my_datatable', 'data'),
               [Input('update_value3', 'n_intervals')])
 def display_table(n_intervals):
-    credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
-    project_id = 'weatherdata1'
-    df_sql = f"""SELECT
+    if n_intervals == 0:
+        raise PreventUpdate
+    else:
+        credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
+        project_id = 'weatherdata1'
+        df_sql = f"""SELECT
                  *
                  FROM
                  `weatherdata1.WeatherSensorsData1.SensorsData1`
                  ORDER BY
-                 DateTime DESC LIMIT 26
+                 DateTime DESC
                  """
-    df = pd1.read_gbq(df_sql, project_id = project_id, dialect = 'standard', credentials = credentials)
-    df1 = df.head(26)
-    return df1.to_dict('records')
+        df = pd1.read_gbq(df_sql, project_id = project_id, dialect = 'standard', credentials = credentials)
+        df['DateTime'] = pd.to_datetime(df['DateTime'])
+        df['DateTime'] = pd.to_datetime(df['DateTime'], format = '%Y-%m-%d %H:%M:%S')
+        df['Date'] = df['DateTime'].dt.date
+        df['Hour'] = pd.to_datetime(df['DateTime']).dt.hour
+        return df.to_dict('records')
