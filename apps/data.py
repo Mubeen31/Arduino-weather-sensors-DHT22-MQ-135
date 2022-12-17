@@ -26,7 +26,7 @@ layout = html.Div([
 
     html.Div([
         dcc.Interval(id = 'update_value3',
-                     interval = 1000,
+                     interval = 1*3000,
                      n_intervals = 0),
     ]),
 
