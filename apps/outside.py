@@ -10,7 +10,7 @@ import pandas as pd
 layout = html.Div([
 
     html.Div([
-        dcc.Interval(id = 'update_value',
+        dcc.Interval(id = 'update_value1',
                      interval = 1000,
                      n_intervals = 0),
     ]),
@@ -45,7 +45,7 @@ layout = html.Div([
 
 
 @app.callback(Output('value1', 'children'),
-              [Input('update_value', 'n_intervals')])
+              [Input('update_value1', 'n_intervals')])
 def update_value(n_intervals):
     credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
     project_id = 'weatherdata1'
@@ -78,7 +78,7 @@ def update_value(n_intervals):
 
 
 @app.callback(Output('value2', 'children'),
-              [Input('update_value', 'n_intervals')])
+              [Input('update_value1', 'n_intervals')])
 def update_value(n_intervals):
     credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
     project_id = 'weatherdata1'
@@ -111,7 +111,7 @@ def update_value(n_intervals):
 
 
 @app.callback(Output('value3', 'children'),
-              [Input('update_value', 'n_intervals')])
+              [Input('update_value1', 'n_intervals')])
 def update_value(n_intervals):
     credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
     project_id = 'weatherdata1'
@@ -144,7 +144,7 @@ def update_value(n_intervals):
 
 
 @app.callback(Output('line_chart', 'figure'),
-              [Input('update_value', 'n_intervals')])
+              [Input('update_value1', 'n_intervals')])
 def line_chart_values(n_intervals):
     credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
     project_id = 'weatherdata1'
