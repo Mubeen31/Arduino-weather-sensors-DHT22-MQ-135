@@ -11,35 +11,35 @@ from app import server
 from apps import outside, inside, data
 
 app.layout = html.Div([
-    dcc.Location(id = 'url', refresh = True),
+    dcc.Location(id='url', refresh=True),
 
-    dbc.Navbar(children = [
+    dbc.Navbar(children=[
         dbc.Container([
             html.A(
                 dbc.Row([
-                    dbc.Col(html.Img(src = app.get_asset_url('sensor.png'), height = '30px')),
-                    dbc.Col(dbc.NavbarBrand('Arduino Weather Sensors', className = 'ms-2')),
+                    dbc.Col(html.Img(src=app.get_asset_url('sensor.png'), height='30px')),
+                    dbc.Col(dbc.NavbarBrand('Arduino Weather Sensors', className='ms-2')),
                 ],
-                    align = 'center',
-                    className = 'g-0',
+                    align='center',
+                    className='g-0',
                 ),
-                href = '/apps/outside',
-                style = {'textDecoration': 'none'},
+                href='/apps/outside',
+                style={'textDecoration': 'none'},
             )]
         ),
-        dbc.NavItem(dbc.NavLink('Outside', href = '/apps/outside', class_name = 'nav_item_color'),
-                    class_name = 'nav_item'),
-        dbc.NavItem(dbc.NavLink('Inside', href = '/apps/inside', class_name = 'nav_item_color'),
-                    class_name = 'nav_item'),
-        dbc.NavItem(dbc.NavLink('Data', href = '/apps/data', class_name = 'nav_item_color'),
-                    class_name = 'nav_item')
+        dbc.NavItem(dbc.NavLink('Outside', href='/apps/outside', class_name='nav_item_color'),
+                    class_name='nav_item'),
+        dbc.NavItem(dbc.NavLink('Inside', href='/apps/inside', class_name='nav_item_color'),
+                    class_name='nav_item'),
+        dbc.NavItem(dbc.NavLink('Data', href='/apps/data', class_name='nav_item_color'),
+                    class_name='nav_item')
 
     ],
-        color = 'dark',
-        dark = True,
+        color='dark',
+        dark=True,
     ),
 
-    html.Div(id = 'page-content', children = [])
+    html.Div(id='page-content', children=[])
 ])
 
 
@@ -58,5 +58,5 @@ def display_page(pathname):
 
 if __name__ == '__main__':
     app.run_server(debug=False,
-                   host = '0.0.0.0', port = 8080
+                   host='0.0.0.0', port=8080
                    )
