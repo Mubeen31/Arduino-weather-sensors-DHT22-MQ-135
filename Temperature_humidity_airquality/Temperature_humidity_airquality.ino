@@ -63,13 +63,13 @@ void loop() {
   Serial.print(temperatureValueC1);  // get value of temperature in degrees Celcius
 ///////Outside humidity and temperature///////
 
-//////Inside Air Quality//////
+//////Outside Air Quality//////
   int airQualityData1 = analogRead(airQuality1);
   co2Level1 = airQualityData1 - 112;
   co2Level1 = map(co2Level1,0,1024,400,5000);
   Serial.print(" , ");
   Serial.println(co2Level1);
-//////Inside Air Quality//////
+//////Outside Air Quality//////
 
   delay(5000);
 }
