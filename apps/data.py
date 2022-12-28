@@ -6,7 +6,7 @@ from app import app
 from google.oauth2 import service_account
 import pandas_gbq as pd1
 import pandas as pd
-import dash_table as dt
+from dash import dash_table
 
 credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
 project_id = 'weatherdata1'
@@ -37,31 +37,31 @@ layout = html.Div([
     ], className='header_card1'),
 
     html.Div([
-        html.Div([dt.DataTable(id='my_datatable',
-                               columns=[{"name": i, "id": i} for i in df4.columns],
-                               page_size=13,
-                               sort_action="native",
-                               sort_mode="multi",
-                               virtualization=True,
-                               style_cell={'textAlign': 'left',
-                                           'min-width': '100px',
-                                           'backgroundColor': 'rgba(255, 255, 255, 0)',
-                                           'minWidth': 180,
-                                           'maxWidth': 180,
-                                           'width': 180},
-                               style_header={
-                                   'backgroundColor': 'black',
-                                   'fontWeight': 'bold',
-                                   'font': 'Lato, sans-serif',
-                                   'color': 'orange',
-                                   'border': '1px solid white',
-                               },
-                               style_data={'textOverflow': 'hidden',
-                                           'color': 'black',
+        html.Div([dash_table.DataTable(id='my_datatable',
+                                       columns=[{"name": i, "id": i} for i in df4.columns],
+                                       page_size=13,
+                                       sort_action="native",
+                                       sort_mode="multi",
+                                       virtualization=True,
+                                       style_cell={'textAlign': 'left',
+                                                   'min-width': '100px',
+                                                   'backgroundColor': 'rgba(255, 255, 255, 0)',
+                                                   'minWidth': 180,
+                                                   'maxWidth': 180,
+                                                   'width': 180},
+                                       style_header={
+                                           'backgroundColor': 'black',
                                            'fontWeight': 'bold',
-                                           'font': 'Lato, sans-serif'},
-                               fixed_rows={'headers': True},
-                               )
+                                           'font': 'Lato, sans-serif',
+                                           'color': 'orange',
+                                           'border': '1px solid white',
+                                       },
+                                       style_data={'textOverflow': 'hidden',
+                                                   'color': 'black',
+                                                   'fontWeight': 'bold',
+                                                   'font': 'Lato, sans-serif'},
+                                       fixed_rows={'headers': True},
+                                       )
                   ], className='bg_table')
     ], className='bg_container')
 ])
