@@ -5,7 +5,7 @@ import os
 from google.cloud import bigquery
 
 # copy the port from your Arduino editor
-PORT = 'COM4'
+PORT = 'COM5'
 ser = serial.Serial(PORT, 9600)
 
 while True:

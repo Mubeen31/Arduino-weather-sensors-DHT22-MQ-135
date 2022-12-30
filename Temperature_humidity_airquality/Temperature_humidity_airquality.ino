@@ -71,5 +71,5 @@ void loop() {
   Serial.println(co2Level1);
 //////Outside Air Quality//////
 
-  delay(5000);
+  delay(10000);
 }
