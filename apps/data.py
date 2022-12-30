@@ -8,16 +8,17 @@ import pandas_gbq as pd1
 import pandas as pd
 from dash import dash_table
 
-credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
-project_id = 'weatherdata1'
-df3_sql = f"""SELECT
-             *
-             FROM
-             `weatherdata1.WeatherSensorsData1.SensorsData1`
-             ORDER BY
-             DateTime DESC LIMIT 1
-             """
-df4 = pd1.read_gbq(df3_sql, project_id=project_id, dialect='standard', credentials=credentials)
+# credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
+# project_id = 'weatherdata1'
+# df3_sql = f"""SELECT
+#              *
+#              FROM
+#              `weatherdata1.WeatherSensorsData1.SensorsData1`
+#              ORDER BY
+#              DateTime DESC LIMIT 1
+#              """
+# df4 = pd1.read_gbq(df3_sql, project_id=project_id, dialect='standard', credentials=credentials)
+df4 = pd.read_csv('data.csv')
 df4['DateTime'] = pd.to_datetime(df4['DateTime'])
 df4['Date'] = df4['DateTime'].dt.date
 df4['Date'] = pd.to_datetime(df4['Date'])
@@ -73,16 +74,17 @@ def update_value(n_intervals):
     if n_intervals == 0:
         raise PreventUpdate
     else:
-        credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
-        project_id = 'weatherdata1'
-        df_sql = f"""SELECT
-                 *
-                 FROM
-                 `weatherdata1.WeatherSensorsData1.SensorsData1`
-                 ORDER BY
-                 DateTime ASC
-                 """
-        df = pd1.read_gbq(df_sql, project_id=project_id, dialect='standard', credentials=credentials)
+        # credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
+        # project_id = 'weatherdata1'
+        # df_sql = f"""SELECT
+        #          *
+        #          FROM
+        #          `weatherdata1.WeatherSensorsData1.SensorsData1`
+        #          ORDER BY
+        #          DateTime ASC
+        #          """
+        # df = pd1.read_gbq(df_sql, project_id=project_id, dialect='standard', credentials=credentials)
+        df = pd.read_csv('data.csv')
         df['DateTime'] = pd.to_datetime(df['DateTime'])
         df['DateTime'] = pd.to_datetime(df['DateTime'], format='%Y-%m-%d %H:%M:%S')
         df['Date'] = df['DateTime'].dt.date
@@ -118,16 +120,18 @@ def display_table(n_intervals):
     if n_intervals == 0:
         raise PreventUpdate
     else:
-        credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
-        project_id = 'weatherdata1'
-        df_sql = f"""SELECT
-                 *
-                 FROM
-                 `weatherdata1.WeatherSensorsData1.SensorsData1`
-                 ORDER BY
-                 DateTime DESC
-                 """
-        df = pd1.read_gbq(df_sql, project_id=project_id, dialect='standard', credentials=credentials)
+        # credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
+        # project_id = 'weatherdata1'
+        # df_sql = f"""SELECT
+        #          *
+        #          FROM
+        #          `weatherdata1.WeatherSensorsData1.SensorsData1`
+        #          ORDER BY
+        #          DateTime DESC
+        #          """
+        # df = pd1.read_gbq(df_sql, project_id=project_id, dialect='standard', credentials=credentials)
+        df = pd.read_csv('data.csv')
+        df.sort_values(by='DateTime', ascending=False, inplace=True)
         df['DateTime'] = pd.to_datetime(df['DateTime'])
         df['DateTime'] = pd.to_datetime(df['DateTime'], format='%Y-%m-%d %H:%M:%S')
         df['Date'] = df['DateTime'].dt.date
