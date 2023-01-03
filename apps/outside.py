@@ -10,7 +10,7 @@ layout = html.Div([
 
     html.Div([
         dcc.Interval(id='update_value1',
-                     interval=1 * 12000,
+                     interval=1 * 5000,
                      n_intervals=0),
     ]),
 
@@ -49,6 +49,7 @@ def update_value(n_intervals):
     header = ['DateTime', 'InsideHumidity', 'InsideTemperature', 'InsideCO2',
               'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
     df3 = pd.read_csv('data1.csv', names=header)
+    df3.drop_duplicates()
     get_temp = df3['OutsideTemperature'].tail(1).iloc[0]
 
     return [
@@ -75,6 +76,7 @@ def update_value(n_intervals):
     header = ['DateTime', 'InsideHumidity', 'InsideTemperature', 'InsideCO2',
               'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
     df3 = pd.read_csv('data1.csv', names=header)
+    df3.drop_duplicates()
     get_humidity = df3['OutsideHumidity'].tail(1).iloc[0]
 
     return [
@@ -101,6 +103,7 @@ def update_value(n_intervals):
     header = ['DateTime', 'InsideHumidity', 'InsideTemperature', 'InsideCO2',
               'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
     df3 = pd.read_csv('data1.csv', names=header)
+    df3.drop_duplicates()
     get_co2 = df3['OutsideCO2'].tail(1).iloc[0]
 
     return [
@@ -131,6 +134,7 @@ def line_chart_values(n_intervals):
     df3['Date'] = df3['DateTime'].dt.date
     df3['Date'] = pd.to_datetime(df3['Date'])
     df3['Hour'] = pd.to_datetime(df3['DateTime']).dt.hour
+    df3.drop_duplicates()
     unique_date = df3['Date'].unique()
     filter_today_date = df3[df3['Date'] == unique_date[-1]][['Date', 'Hour', 'OutsideTemperature']]
     today_hourly_values = filter_today_date.groupby(['Date', 'Hour'])['OutsideTemperature'].mean().reset_index()
