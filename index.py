@@ -105,7 +105,7 @@ def update_confirmed(n_intervals):
     header = ['DateTime', 'InsideHumidity', 'InsideTemperature', 'InsideCO2',
               'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
     df3 = pd.read_csv('data1.csv', names=header)
-    df3.drop_duplicates()
+    df3.drop_duplicates(keep=False, inplace=True)
     get_date = df3['DateTime'].tail(1).iloc[0]
 
     return [

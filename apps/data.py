@@ -15,7 +15,7 @@ df4['DateTime'] = pd.to_datetime(df4['DateTime'])
 df4['Date'] = df4['DateTime'].dt.date
 df4['Date'] = pd.to_datetime(df4['Date'])
 df4['Hour'] = pd.to_datetime(df4['DateTime']).dt.hour
-df4.drop_duplicates()
+df4.drop_duplicates(keep=False, inplace=True)
 
 layout = html.Div([
 
@@ -71,7 +71,7 @@ def update_value(n_intervals):
     df3['DateTime'] = pd.to_datetime(df3['DateTime'], format='%Y-%m-%d %H:%M:%S')
     df3['Date'] = df3['DateTime'].dt.date
     df3['Hour'] = pd.to_datetime(df3['DateTime']).dt.hour
-    df3.drop_duplicates()
+    df3.drop_duplicates(keep=False, inplace=True)
     unique_date = df3['Date'].unique()
     filter_today_date = len(df3[df3['Date'] == unique_date[-1]])
     filter_total_rows = len(df3['Date'])
@@ -107,6 +107,6 @@ def display_table(n_intervals):
     df3['DateTime'] = pd.to_datetime(df3['DateTime'], format='%Y-%m-%d %H:%M:%S')
     df3['Date'] = df3['DateTime'].dt.date
     df3['Hour'] = pd.to_datetime(df3['DateTime']).dt.hour
-    df3.drop_duplicates()
+    df3.drop_duplicates(keep=False, inplace=True)
     sort_df = df3.sort_values(by=['DateTime'], ascending=False)
     return sort_df.to_dict('records')
