@@ -51,7 +51,7 @@ def update_value(n_intervals):
     header = ['DateTime', 'InsideHumidity', 'InsideTemperature', 'InsideCO2',
               'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
     df3 = pd.read_csv('data1.csv', names=header)
-    get_temp = df3['InsideTemperature'].head(1).iloc[0]
+    get_temp = df3['InsideTemperature'].tail(1).iloc[0]
 
     return [
         html.Div([
