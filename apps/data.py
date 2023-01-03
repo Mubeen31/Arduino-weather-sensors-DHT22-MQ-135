@@ -105,5 +105,5 @@ def display_table(n_intervals):
     df3['DateTime'] = pd.to_datetime(df3['DateTime'], format='%Y-%m-%d %H:%M:%S')
     df3['Date'] = df3['DateTime'].dt.date
     df3['Hour'] = pd.to_datetime(df3['DateTime']).dt.hour
-    df3.sort_values(by=['DateTime'], ascending=False)
+    df3.sort_values(by=['DateTime'])
     return df3.to_dict('records')
