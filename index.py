@@ -98,7 +98,6 @@ def update_confirmed(n_intervals):
     df = pd1.read_gbq(df_sql, project_id=project_id, dialect='standard', credentials=credentials)
     df1 = df.tail(1)
     df2 = df1.values.tolist()[0]
-    print(df2)
     with open('data1.csv', 'a', newline='\n') as f:
         writer = csv.writer(f, delimiter=',')
         writer.writerow(df2)
