@@ -60,12 +60,12 @@ def update_value(n_intervals):
     df = pd1.read_gbq(df_sql, project_id=project_id, dialect='standard', credentials=credentials)
     df1 = df.tail(1)
     df2 = df1.values.tolist()[0]
-    with open('data1.csv', 'a', newline='\n') as f:
+    with open('apps/data1.csv', 'a', newline='\n') as f:
         writer = csv.writer(f, delimiter=',')
         writer.writerow(df2)
     header = ['DateTime', 'InsideHumidity', 'InsideTemperature', 'InsideCO2',
               'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
-    df3 = pd.read_csv('data1.csv', names=header)
+    df3 = pd.read_csv('apps/data1.csv', names=header)
     get_temp = df3['OutsideTemperature'].tail(1).iloc[0]
 
     return [

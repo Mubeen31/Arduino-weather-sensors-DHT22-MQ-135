@@ -10,7 +10,7 @@ from dash import dash_table
 
 header = ['DateTime', 'InsideHumidity', 'InsideTemperature', 'InsideCO2',
           'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
-df4 = pd.read_csv('data1.csv', names=header)
+df4 = pd.read_csv('apps/data1.csv', names=header)
 df4['DateTime'] = pd.to_datetime(df4['DateTime'])
 df4['Date'] = df4['DateTime'].dt.date
 df4['Date'] = pd.to_datetime(df4['Date'])
@@ -65,7 +65,7 @@ layout = html.Div([
 def update_value(n_intervals):
     header = ['DateTime', 'InsideHumidity', 'InsideTemperature', 'InsideCO2',
               'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
-    df3 = pd.read_csv('data1.csv', names=header)
+    df3 = pd.read_csv('apps/data1.csv', names=header)
     df3['DateTime'] = pd.to_datetime(df3['DateTime'])
     df3['DateTime'] = pd.to_datetime(df3['DateTime'], format='%Y-%m-%d %H:%M:%S')
     df3['Date'] = df3['DateTime'].dt.date
@@ -100,7 +100,7 @@ def update_value(n_intervals):
 def display_table(n_intervals):
     header = ['DateTime', 'InsideHumidity', 'InsideTemperature', 'InsideCO2',
               'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
-    df3 = pd.read_csv('data1.csv', names=header)
+    df3 = pd.read_csv('apps/data1.csv', names=header)
     df3['DateTime'] = pd.to_datetime(df3['DateTime'])
     df3['DateTime'] = pd.to_datetime(df3['DateTime'], format='%Y-%m-%d %H:%M:%S')
     df3['Date'] = df3['DateTime'].dt.date
