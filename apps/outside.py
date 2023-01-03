@@ -66,6 +66,7 @@ def update_value(n_intervals):
     header = ['DateTime', 'InsideHumidity', 'InsideTemperature', 'InsideCO2',
               'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
     df3 = pd.read_csv('apps/data1.csv', names=header)
+    print(df3)
     get_temp = df3['OutsideTemperature'].tail(1).iloc[0]
 
     return [
@@ -91,7 +92,7 @@ def update_value(n_intervals):
 def update_value(n_intervals):
     header = ['DateTime', 'InsideHumidity', 'InsideTemperature', 'InsideCO2',
               'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
-    df3 = pd.read_csv('data1.csv', names=header)
+    df3 = pd.read_csv('apps/data1.csv', names=header)
     get_humidity = df3['OutsideHumidity'].tail(1).iloc[0]
 
     return [
@@ -117,7 +118,7 @@ def update_value(n_intervals):
 def update_value(n_intervals):
     header = ['DateTime', 'InsideHumidity', 'InsideTemperature', 'InsideCO2',
               'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
-    df3 = pd.read_csv('data1.csv', names=header)
+    df3 = pd.read_csv('apps/data1.csv', names=header)
     get_co2 = df3['OutsideCO2'].tail(1).iloc[0]
 
     return [
@@ -143,7 +144,7 @@ def update_value(n_intervals):
 def line_chart_values(n_intervals):
     header = ['DateTime', 'InsideHumidity', 'InsideTemperature', 'InsideCO2',
               'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
-    df3 = pd.read_csv('data1.csv', names=header)
+    df3 = pd.read_csv('apps/data1.csv', names=header)
     df3['DateTime'] = pd.to_datetime(df3['DateTime'])
     df3['Date'] = df3['DateTime'].dt.date
     df3['Date'] = pd.to_datetime(df3['Date'])
