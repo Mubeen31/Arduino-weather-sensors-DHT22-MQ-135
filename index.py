@@ -3,6 +3,9 @@ from dash import dcc
 from dash.dependencies import Input, Output
 import dash_bootstrap_components as dbc
 import pandas as pd
+from google.oauth2 import service_account
+import pandas_gbq as pd1
+import csv
 
 # Connect to main app.py file
 from app import app
@@ -84,9 +87,25 @@ def display_page(pathname):
 @app.callback(Output('date', 'children'),
               [Input('update_value', 'n_intervals')])
 def update_confirmed(n_intervals):
+    credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
+    project_id = 'weatherdata1'
+    df_sql = f"""SELECT *
+                     FROM
+                     `weatherdata1.WeatherSensorsData1.SensorsData1`
+                     ORDER BY
+                     DateTime DESC LIMIT 1
+                     """
+    df = pd1.read_gbq(df_sql, project_id=project_id, dialect='standard', credentials=credentials)
+    df1 = df.tail(1)
+    df2 = df1.values.tolist()[0]
+    print(df2)
+    with open('data1.csv', 'a', newline='\n') as f:
+        writer = csv.writer(f, delimiter=',')
+        writer.writerow(df2)
+
     header = ['DateTime', 'InsideHumidity', 'InsideTemperature', 'InsideCO2',
               'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
-    df3 = pd.read_csv('apps/data1.csv', names=header)
+    df3 = pd.read_csv('data1.csv', names=header)
     get_date = df3['DateTime'].tail(1).iloc[0]
 
     return [

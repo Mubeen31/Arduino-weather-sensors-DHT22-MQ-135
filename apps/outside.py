@@ -1,11 +1,8 @@
 from dash import html
 from dash import dcc
 from dash.dependencies import Input, Output
-from dash.exceptions import PreventUpdate
 import plotly.graph_objs as go
 from app import app
-from google.oauth2 import service_account
-import pandas_gbq as pd1
 import pandas as pd
 import csv
 
@@ -49,24 +46,9 @@ layout = html.Div([
 @app.callback(Output('value1', 'children'),
               [Input('update_value1', 'n_intervals')])
 def update_value(n_intervals):
-    credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
-    project_id = 'weatherdata1'
-    df_sql = f"""SELECT *
-                     FROM
-                     `weatherdata1.WeatherSensorsData1.SensorsData1`
-                     ORDER BY
-                     DateTime DESC LIMIT 1
-                     """
-    df = pd1.read_gbq(df_sql, project_id=project_id, dialect='standard', credentials=credentials)
-    df1 = df.tail(1)
-    df2 = df1.values.tolist()[0]
-    with open('apps/data1.csv', 'a', newline='\n') as f:
-        writer = csv.writer(f, delimiter=',')
-        writer.writerow(df2)
     header = ['DateTime', 'InsideHumidity', 'InsideTemperature', 'InsideCO2',
               'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
-    df3 = pd.read_csv('apps/data1.csv', names=header)
-    print(df3)
+    df3 = pd.read_csv('data1.csv', names=header)
     get_temp = df3['OutsideTemperature'].tail(1).iloc[0]
 
     return [
@@ -92,7 +74,7 @@ def update_value(n_intervals):
 def update_value(n_intervals):
     header = ['DateTime', 'InsideHumidity', 'InsideTemperature', 'InsideCO2',
               'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
-    df3 = pd.read_csv('apps/data1.csv', names=header)
+    df3 = pd.read_csv('data1.csv', names=header)
     get_humidity = df3['OutsideHumidity'].tail(1).iloc[0]
 
     return [
@@ -118,7 +100,7 @@ def update_value(n_intervals):
 def update_value(n_intervals):
     header = ['DateTime', 'InsideHumidity', 'InsideTemperature', 'InsideCO2',
               'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
-    df3 = pd.read_csv('apps/data1.csv', names=header)
+    df3 = pd.read_csv('data1.csv', names=header)
     get_co2 = df3['OutsideCO2'].tail(1).iloc[0]
 
     return [
@@ -144,7 +126,7 @@ def update_value(n_intervals):
 def line_chart_values(n_intervals):
     header = ['DateTime', 'InsideHumidity', 'InsideTemperature', 'InsideCO2',
               'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
-    df3 = pd.read_csv('apps/data1.csv', names=header)
+    df3 = pd.read_csv('data1.csv', names=header)
     df3['DateTime'] = pd.to_datetime(df3['DateTime'])
     df3['Date'] = df3['DateTime'].dt.date
     df3['Date'] = pd.to_datetime(df3['Date'])
