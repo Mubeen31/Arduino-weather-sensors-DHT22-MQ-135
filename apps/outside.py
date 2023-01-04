@@ -4,13 +4,14 @@ from dash.dependencies import Input, Output
 import plotly.graph_objs as go
 from app import app
 import pandas as pd
-import csv
+from google.oauth2 import service_account
+import pandas_gbq as pd1
 
 layout = html.Div([
 
     html.Div([
         dcc.Interval(id='update_value1',
-                     interval=1 * 5000,
+                     interval=1 * 11000,
                      n_intervals=0),
     ]),
 
@@ -46,11 +47,16 @@ layout = html.Div([
 @app.callback(Output('value1', 'children'),
               [Input('update_value1', 'n_intervals')])
 def update_value(n_intervals):
-    header = ['DateTime', 'InsideHumidity', 'InsideTemperature', 'InsideCO2',
-              'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
-    df3 = pd.read_csv('data1.csv', names=header)
-    df3.drop_duplicates(keep=False, inplace=True)
-    get_temp = df3['OutsideTemperature'].tail(1).iloc[0]
+    credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
+    project_id = 'weatherdata1'
+    df_sql = f"""SELECT OutsideTemperature
+                         FROM
+                         `weatherdata1.WeatherSensorsData1.SensorsData1`
+                         ORDER BY
+                         DateTime DESC LIMIT 1
+                         """
+    df = pd1.read_gbq(df_sql, project_id=project_id, dialect='standard', credentials=credentials)
+    get_temp = df['OutsideTemperature'].head(1).iloc[0]
 
     return [
         html.Div([
@@ -73,11 +79,16 @@ def update_value(n_intervals):
 @app.callback(Output('value2', 'children'),
               [Input('update_value1', 'n_intervals')])
 def update_value(n_intervals):
-    header = ['DateTime', 'InsideHumidity', 'InsideTemperature', 'InsideCO2',
-              'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
-    df3 = pd.read_csv('data1.csv', names=header)
-    df3.drop_duplicates(keep=False, inplace=True)
-    get_humidity = df3['OutsideHumidity'].tail(1).iloc[0]
+    credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
+    project_id = 'weatherdata1'
+    df_sql = f"""SELECT OutsideHumidity
+                             FROM
+                             `weatherdata1.WeatherSensorsData1.SensorsData1`
+                             ORDER BY
+                             DateTime DESC LIMIT 1
+                             """
+    df = pd1.read_gbq(df_sql, project_id=project_id, dialect='standard', credentials=credentials)
+    get_humidity = df['OutsideHumidity'].head(1).iloc[0]
 
     return [
         html.Div([
@@ -100,11 +111,16 @@ def update_value(n_intervals):
 @app.callback(Output('value3', 'children'),
               [Input('update_value1', 'n_intervals')])
 def update_value(n_intervals):
-    header = ['DateTime', 'InsideHumidity', 'InsideTemperature', 'InsideCO2',
-              'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
-    df3 = pd.read_csv('data1.csv', names=header)
-    df3.drop_duplicates(keep=False, inplace=True)
-    get_co2 = df3['OutsideCO2'].tail(1).iloc[0]
+    credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
+    project_id = 'weatherdata1'
+    df_sql = f"""SELECT OutsideCO2
+                             FROM
+                             `weatherdata1.WeatherSensorsData1.SensorsData1`
+                             ORDER BY
+                             DateTime DESC LIMIT 1
+                             """
+    df = pd1.read_gbq(df_sql, project_id=project_id, dialect='standard', credentials=credentials)
+    get_co2 = df['OutsideCO2'].head(1).iloc[0]
 
     return [
         html.Div([
@@ -127,14 +143,19 @@ def update_value(n_intervals):
 @app.callback(Output('line_chart', 'figure'),
               [Input('update_value1', 'n_intervals')])
 def line_chart_values(n_intervals):
-    header = ['DateTime', 'InsideHumidity', 'InsideTemperature', 'InsideCO2',
-              'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
-    df3 = pd.read_csv('data1.csv', names=header)
+    credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
+    project_id = 'weatherdata1'
+    df_sql = f"""SELECT DateTime, OutsideTemperature
+                             FROM
+                             `weatherdata1.WeatherSensorsData1.SensorsData1`
+                             ORDER BY
+                             DateTime ASC
+                             """
+    df3 = pd1.read_gbq(df_sql, project_id=project_id, dialect='standard', credentials=credentials)
     df3['DateTime'] = pd.to_datetime(df3['DateTime'])
     df3['Date'] = df3['DateTime'].dt.date
     df3['Date'] = pd.to_datetime(df3['Date'])
     df3['Hour'] = pd.to_datetime(df3['DateTime']).dt.hour
-    df3.drop_duplicates(keep=False, inplace=True)
     unique_date = df3['Date'].unique()
     filter_today_date = df3[df3['Date'] == unique_date[-1]][['Date', 'Hour', 'OutsideTemperature']]
     today_hourly_values = filter_today_date.groupby(['Date', 'Hour'])['OutsideTemperature'].mean().reset_index()

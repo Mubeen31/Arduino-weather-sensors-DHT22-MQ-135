@@ -8,20 +8,25 @@ import pandas_gbq as pd1
 import pandas as pd
 from dash import dash_table
 
-header = ['DateTime', 'InsideHumidity', 'InsideTemperature', 'InsideCO2',
-          'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
-df4 = pd.read_csv('data1.csv', names=header)
+credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
+project_id = 'weatherdata1'
+df_sql = f"""SELECT *
+                             FROM
+                             `weatherdata1.WeatherSensorsData1.SensorsData1`
+                             ORDER BY
+                             DateTime DESC LIMIT 1
+                             """
+df4 = pd1.read_gbq(df_sql, project_id=project_id, dialect='standard', credentials=credentials)
 df4['DateTime'] = pd.to_datetime(df4['DateTime'])
 df4['Date'] = df4['DateTime'].dt.date
 df4['Date'] = pd.to_datetime(df4['Date'])
 df4['Hour'] = pd.to_datetime(df4['DateTime']).dt.hour
-df4.drop_duplicates(keep=False, inplace=True)
 
 layout = html.Div([
 
     html.Div([
         dcc.Interval(id='update_value3',
-                     interval=1 * 5000,
+                     interval=1 * 11000,
                      n_intervals=0),
     ]),
 
@@ -64,14 +69,19 @@ layout = html.Div([
 @app.callback(Output('total_rows', 'children'),
               [Input('update_value3', 'n_intervals')])
 def update_value(n_intervals):
-    header = ['DateTime', 'InsideHumidity', 'InsideTemperature', 'InsideCO2',
-              'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
-    df3 = pd.read_csv('data1.csv', names=header)
+    credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
+    project_id = 'weatherdata1'
+    df_sql = f"""SELECT *
+                                 FROM
+                                 `weatherdata1.WeatherSensorsData1.SensorsData1`
+                                 ORDER BY
+                                 DateTime DESC
+                                 """
+    df3 = pd1.read_gbq(df_sql, project_id=project_id, dialect='standard', credentials=credentials)
     df3['DateTime'] = pd.to_datetime(df3['DateTime'])
     df3['DateTime'] = pd.to_datetime(df3['DateTime'], format='%Y-%m-%d %H:%M:%S')
     df3['Date'] = df3['DateTime'].dt.date
     df3['Hour'] = pd.to_datetime(df3['DateTime']).dt.hour
-    df3.drop_duplicates(keep=False, inplace=True)
     unique_date = df3['Date'].unique()
     filter_today_date = len(df3[df3['Date'] == unique_date[-1]])
     filter_total_rows = len(df3['Date'])
@@ -100,13 +110,17 @@ def update_value(n_intervals):
 @app.callback(Output('my_datatable', 'data'),
               [Input('update_value3', 'n_intervals')])
 def display_table(n_intervals):
-    header = ['DateTime', 'InsideHumidity', 'InsideTemperature', 'InsideCO2',
-              'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
-    df3 = pd.read_csv('data1.csv', names=header)
+    credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
+    project_id = 'weatherdata1'
+    df_sql = f"""SELECT *
+                                     FROM
+                                     `weatherdata1.WeatherSensorsData1.SensorsData1`
+                                     ORDER BY
+                                     DateTime DESC
+                                     """
+    df3 = pd1.read_gbq(df_sql, project_id=project_id, dialect='standard', credentials=credentials)
     df3['DateTime'] = pd.to_datetime(df3['DateTime'])
     df3['DateTime'] = pd.to_datetime(df3['DateTime'], format='%Y-%m-%d %H:%M:%S')
     df3['Date'] = df3['DateTime'].dt.date
     df3['Hour'] = pd.to_datetime(df3['DateTime']).dt.hour
-    df3.drop_duplicates(keep=False, inplace=True)
-    sort_df = df3.sort_values(by=['DateTime'], ascending=False)
-    return sort_df.to_dict('records')
+    return df3.to_dict('records')
